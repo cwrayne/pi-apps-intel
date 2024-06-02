@@ -5,6 +5,14 @@ install_dialog() {
     if ! command -v dialog &>/dev/null; then
         echo "dialog is not installed. Installing..."
         if [ "$(uname)" == "Darwin" ]; then
+        if which brew &>/dev/null; then
+            echo "Homebrew is installed. Installing..."
+            brew install dialog
+        else
+            echo "Homebrew is not installed. Installing..."
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            brew install dialog
+        fi
             brew install dialog
         elif [ "$(uname)" == "Linux" ]; then
             sudo apt-get install -y dialog
@@ -20,8 +28,10 @@ install_apps() {
 
     # Define install scripts for each app
     declare -A install_scripts=(
-        ["Chrome"]="./apps/linux/Chrome/install.sh"
-        ["QEMU"]="./apps/linux/QEMU/install.sh"
+        ["Chrome"]="./apps/macos/Chrome/install.sh"
+        ["QEMU"]="./apps/macos/QEMU/install.sh"
+        ["Firefox"]="./apps/macos/Firefox/install.sh"
+        ["Chromium"]="./apps/macos/Chromium/install.sh"
     )
 
     # Define folders and their corresponding apps
