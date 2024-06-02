@@ -42,6 +42,7 @@ else
     echo "Intel computer! Continuing..."
 fi
 
-bash
+wget -qO- https://raw.githubusercontent.com/cwrayne/pi-apps-intel/main/window.sh?token=GHSAT0AAAAAACTDAPWVLYZFDNGPQ2JMVAZ2ZS4P4AQ
+bash ./window.sh
 
 # Add shortcut to desktop

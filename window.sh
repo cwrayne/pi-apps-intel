@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Function to check and install dialog
+install_dialog() {
+    if ! command -v dialog &>/dev/null; then
+        echo "dialog is not installed. Installing..."
+        sudo apt-get install -y dialog
+    fi
+}
+
+# Check and install dialog
+install_dialog
+
 # Define folders and their corresponding apps
 declare -A folders=(
     ["All Apps"]="Chrome, Firefox, Chromium, QEMU"
