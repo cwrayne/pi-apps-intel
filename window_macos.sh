@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Get apps from repo
+
+
 # Function to check and install dialog
 install_dialog() {
     if ! command -v dialog &>/dev/null; then
