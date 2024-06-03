@@ -34,14 +34,12 @@ install_apps() {
         ["Chromium"]="./apps/macos/Chromium/install.sh"
     )
 
-# Define folders and their corresponding apps
-declare -A folders
-folders=(
-    ["All Apps"]="Chrome"
-    ["Internet"]="Chrome"
-    ["Emulators"]="QEMU"
-)
-
+    # Define folders and their corresponding apps
+    declare -A folders=(
+        ["All Apps"]="Chrome,Firefox,Chromium,QEMU"
+        ["Internet"]="Chrome,Firefox,Chromium"
+        ["Emulators"]="QEMU"
+    )
 
 # Start window to choose a category
 dialog --clear --title "App Installer" --menu "Choose an app category:" 15 50 4 \
