@@ -6,11 +6,12 @@ install_dialog() {
         echo "dialog is not installed. Installing..."
         if [ "$(uname)" == "Darwin" ]; then
         if which brew &>/dev/null; then
-            echo "Homebrew is installed."
-            brew install qemu
+            echo "Homebrew is installed. Installing..."
+            brew install dialog
         else
             echo "Homebrew is not installed. Installing..."
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            brew install dialog
         fi
             brew install dialog
         elif [ "$(uname)" == "Linux" ]; then
@@ -33,12 +34,14 @@ install_apps() {
         ["Chromium"]="./apps/macos/Chromium/install.sh"
     )
 
-    # Define folders and their corresponding apps
-    declare -A folders=(
-        ["All Apps"]="Chrome,Firefox,Chromium,QEMU"
-        ["Internet"]="Chrome,Firefox,Chromium"
-        ["Emulators"]="QEMU"
-    )
+# Define folders and their corresponding apps
+declare -A folders
+folders=(
+    ["All Apps"]="Chrome"
+    ["Internet"]="Chrome"
+    ["Emulators"]="QEMU"
+)
+
 
 # Start window to choose a category
 dialog --clear --title "App Installer" --menu "Choose an app category:" 15 50 4 \

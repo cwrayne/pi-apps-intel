@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Function to check and install dialog
 install_dialog() {
     if ! command -v dialog &>/dev/null; then
         echo "dialog is not installed. Installing..."
@@ -14,8 +15,6 @@ install_dialog() {
     fi
 }
 
-install_dialog
-
 # Function to install apps
 install_apps() {
 
@@ -24,3 +23,67 @@ install_apps() {
         ["Chrome"]="./apps/linux/Chrome/install.sh"
         ["QEMU"]="./apps/linux/QEMU/install.sh"
     )
+
+    # Define folders and their corresponding apps
+    declare -A folders=(
+        ["All Apps"]="Chrome,Firefox,Chromium,QEMU"
+        ["Internet"]="Chrome,Firefox,Chromium"
+        ["Emulators"]="QEMU"
+    )
+
+# Start window to choose a category
+dialog --clear --title "App Installer" --menu "Choose an app category:" 15 50 4 \
+    "All Apps" "Install all apps" \
+    "Internet" "Install internet-related apps" \
+    "Emulators" "Install emulators" \
+    2>/tmp/menuitem.$$
+
+    # Get selection status
+    category=$(cat /tmp/menuitem.$$)
+    rm /tmp/menuitem.$$
+
+    # Check if the user selected a category
+    # Check if the user selected a category
+if [ "$category" != "" ]; then
+    # Get the list of apps for the selected category
+    app_list=${folders[$category]}
+    # Convert the app list to an array
+    IFS=', ' read -r -a apps <<< "$app_list"
+
+    # Debugging: Print app list
+    echo "Apps in category: ${apps[@]}"
+
+    # Start window to choose an app
+    dialog --clear --title "App Installer" --menu "Choose an app:" 20 50 10 \
+        $(for app in "${apps[@]}"; do echo "$app" "$app"; done) \
+        2>/tmp/menuitem.$$
+
+        # Get selection status
+        app=$(cat /tmp/menuitem.$$)
+        rm /tmp/menuitem.$$
+
+        # Check if the user selected an app
+        if [ "$app" != "" ]; then
+            # Check if the app has an associated install script
+            if [ "${install_scripts[$app]+exists}" ]; then
+                # Run the install script for the app
+                bash "${install_scripts[$app]}"
+            else
+                echo "No install script found for $app"
+            fi
+        else
+            echo "No app selected"
+        fi
+    else
+        echo "No category selected"
+    fi
+}
+
+# Main function
+main() {
+    install_dialog
+    install_apps
+}
+
+# Execute main function
+main

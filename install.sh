@@ -1,44 +1,5 @@
 #!/bin/bash
 
-# Start text
-echo Pi Apps Intel v0.1
-cat << "EOF"
- ██████  ██      █████  ██████  ██████  ███████ 
- ██   ██ ██     ██   ██ ██   ██ ██   ██ ██      
- ██████  ██     ███████ ██████  ██████  ███████ 
- ██      ██     ██   ██ ██      ██           ██ 
- ██      ██     ██   ██ ██      ██      ███████ 
-                                      
- ██ ███    ██ ████████ ███████ ██      
- ██ ████   ██    ██    ██      ██      
- ██ ██ ██  ██    ██    █████   ██      
- ██ ██  ██ ██    ██    ██      ██      
- ██ ██   ████    ██    ███████ ███████                                                    
-EOF
-
-# Check if the architecture is ARM
-if dpkg --print-architecture | grep -q arm; then
-    echo "ARM computer! Please install normal pi-apps."
-    read -p "Would you like to install pi-apps? (y/n) " answer
-    if [ "$answer" = "y" ]; then
-        wget -qO- https://raw.githubusercontent.com/Botspot/pi-apps/master/install | bash
-        exit
-    elif [ "$answer" = "n" ]; then
-        echo "Exiting..."
-        exit
-    fi
-else
-    echo "Detected Intel computer! Continuing..."
-fi
-
-# Function to check and install wget
-install_wget() {
-    if ! command -v wget &>/dev/null; then
-        echo "wget is not installed. Installing..."
-        sudo apt-get install -y wget
-
-install_wget
-
 # Function to check and install dialog
 install_dialog() {
     if ! command -v dialog &>/dev/null; then
@@ -75,6 +36,10 @@ install_apps() {
         "Internet" "Install internet-related apps" \
         "Emulators" "Install emulators" \
         2>/tmp/menuitem.$$
+
+    # Get selection status
+    category=$(cat /tmp/menuitem.$$)
+    rm /tmp/menuitem.$$
 
     # Check if the user selected a category
     if [ "$category" != "" ]; then
